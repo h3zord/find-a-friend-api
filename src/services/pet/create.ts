@@ -1,5 +1,7 @@
 import { Pet } from '@prisma/client'
 import { PetsRepository } from '../../repositories/contracts/pets-repository'
+import { OrganizationsRepository } from '../../repositories/contracts/organization-repository'
+import { OrganizationNotFound } from '../errors/organization-not-found'
 
 interface CreatePetServiceRequest {
   name: string
@@ -15,7 +17,10 @@ interface CreatePetServiceResponse {
 }
 
 export class CreatePetService {
-  constructor(private petsRepository: PetsRepository) {}
+  constructor(
+    private petsRepository: PetsRepository,
+    private organizationsRepository: OrganizationsRepository,
+  ) {}
 
   async execute({
     name,
@@ -25,6 +30,13 @@ export class CreatePetService {
     sex,
     organizationId,
   }: CreatePetServiceRequest): Promise<CreatePetServiceResponse> {
+    const doesOrganizationExist =
+      await this.organizationsRepository.findById(organizationId)
+
+    if (!doesOrganizationExist) {
+      throw new OrganizationNotFound()
+    }
+
     const pet = await this.petsRepository.create({
       name,
       type,
