@@ -25,19 +25,21 @@ enum Sex {
 }
 
 model Pet {
-  id         String   @id @default(uuid())
-  name       String
-  type       Type
-  age        Int
-  color      String
-  sex        Sex
-  created_at DateTime @default(now())
-  update_at  DateTime @updatedAt
+  id            String   @id @default(uuid())
+  name          String
+  type          Type
+  age_in_months Int
+  color         String
+  sex           Sex
+  created_at    DateTime @default(now())
+  update_at     DateTime @updatedAt
 }
 
 model Organization {
   id          String  @id @default(uuid())
   name        String
+  email       String
+  password    String
   description String?
   phone       String
   adress      String
