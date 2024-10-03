@@ -18,6 +18,7 @@ describe('Create Pet Service', () => {
       ageInMonths: 12,
       color: 'Black',
       sex: 'MALE',
+      organizationId: 'org-01',
     })
 
     expect(pet.id).toEqual(expect.any(String))

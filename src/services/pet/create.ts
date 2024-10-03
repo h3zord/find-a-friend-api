@@ -1,5 +1,5 @@
 import { Pet } from '@prisma/client'
-import { PetsRepository } from '../../repositories/pets-repository'
+import { PetsRepository } from '../../repositories/contracts/pets-repository'
 
 interface CreatePetServiceRequest {
   name: string
@@ -7,6 +7,7 @@ interface CreatePetServiceRequest {
   ageInMonths: number
   color: string
   sex: 'MALE' | 'FEMALE'
+  organizationId: string
 }
 
 interface CreatePetServiceResponse {
@@ -22,6 +23,7 @@ export class CreatePetService {
     ageInMonths,
     color,
     sex,
+    organizationId,
   }: CreatePetServiceRequest): Promise<CreatePetServiceResponse> {
     const pet = await this.petsRepository.create({
       name,
@@ -29,6 +31,7 @@ export class CreatePetService {
       age_in_months: ageInMonths,
       color,
       sex,
+      organization_id: organizationId,
     })
 
     return { pet }

@@ -33,10 +33,15 @@ model Pet {
   sex           Sex
   created_at    DateTime @default(now())
   update_at     DateTime @updatedAt
+
+  organization    Organization @relation(fields: [organization_id], references: [id])
+  organization_id String
+
+  @@map("pets")
 }
 
 model Organization {
-  id          String  @id @default(uuid())
+  id          String   @id @default(uuid())
   name        String
   email       String
   password    String
@@ -44,4 +49,10 @@ model Organization {
   phone       String
   adress      String
   city        String
+  created_at  DateTime @default(now())
+  update_at   DateTime @updatedAt
+
+  Pets Pet[]
+
+  @@map("organizations")
 }
