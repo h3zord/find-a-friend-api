@@ -1,7 +1,7 @@
 import { Organization } from '@prisma/client'
 import { OrganizationsRepository } from '../../repositories/contracts/organization-repository'
 
-interface CreateOrganizationServiceRequest {
+interface RegisterOrganizationServiceRequest {
   name: string
   email: string
   password: string
@@ -11,11 +11,11 @@ interface CreateOrganizationServiceRequest {
   city: string
 }
 
-interface CreateOrganizationServiceResponse {
+interface RegisterOrganizationServiceResponse {
   organization: Organization
 }
 
-export class CreateOrganizationService {
+export class RegisterOrganizationService {
   constructor(private organizationsRepository: OrganizationsRepository) {}
 
   async execute({
@@ -26,8 +26,8 @@ export class CreateOrganizationService {
     phone,
     adress,
     city,
-  }: CreateOrganizationServiceRequest): Promise<CreateOrganizationServiceResponse> {
-    const organization = await this.organizationsRepository.create({
+  }: RegisterOrganizationServiceRequest): Promise<RegisterOrganizationServiceResponse> {
+    const organization = await this.organizationsRepository.register({
       name,
       email,
       password,

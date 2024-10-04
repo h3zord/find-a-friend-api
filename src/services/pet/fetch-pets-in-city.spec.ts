@@ -14,7 +14,7 @@ describe('Fetch all pets in one city service', () => {
 
     sut = new FetchPetsInCityService(petsRepository)
 
-    await organizationRepository.create({
+    await organizationRepository.register({
       id: 'org-01',
       name: 'Fake Org',
       email: 'test@org.com',

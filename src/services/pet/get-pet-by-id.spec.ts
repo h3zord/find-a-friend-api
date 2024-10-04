@@ -1,19 +1,19 @@
 import { expect, describe, it, beforeEach } from 'vitest'
 import { InMemoryPetsRepository } from '../../repositories/in-memory/in-memory-pets-repository'
-import { CreatePetService } from './create'
 import { InMemoryOrganizationsRepository } from '../../repositories/in-memory/in-memory-organizations-repository'
-import { OrganizationNotFound } from '../errors/organization-not-found'
+import { GetPetByIdService } from './get-pet-by-id'
+import { PetNotFound } from '../errors/pet-not-found'
 
-let petsRepository: InMemoryPetsRepository
 let organizationRepository: InMemoryOrganizationsRepository
-let sut: CreatePetService
+let petsRepository: InMemoryPetsRepository
+let sut: GetPetByIdService
 
 describe('Create pet service', () => {
   beforeEach(async () => {
     organizationRepository = new InMemoryOrganizationsRepository()
     petsRepository = new InMemoryPetsRepository(organizationRepository)
 
-    sut = new CreatePetService(petsRepository, organizationRepository)
+    sut = new GetPetByIdService(petsRepository)
 
     await organizationRepository.register({
       id: 'org-01',
@@ -25,31 +25,27 @@ describe('Create pet service', () => {
       adress: 'Fake street',
       city: 'Fake city',
     })
-  })
 
-  it('should to create a new pet', async () => {
-    const { pet } = await sut.execute({
+    await petsRepository.create({
+      id: 'pet-01',
       name: 'John Doe',
       type: 'DOG',
-      ageInMonths: 12,
+      age_in_months: 12,
       color: 'Black',
       sex: 'MALE',
-      organizationId: 'org-01',
+      organization_id: 'org-01',
     })
+  })
+
+  it('should to get a pet', async () => {
+    const { pet } = await sut.execute('pet-01')
 
     expect(pet.id).toEqual(expect.any(String))
   })
 
   it('should throw an error when organization id does not exist', async () => {
-    await expect(() =>
-      sut.execute({
-        name: 'John Doe',
-        type: 'DOG',
-        ageInMonths: 12,
-        color: 'Black',
-        sex: 'MALE',
-        organizationId: 'org-02',
-      }),
-    ).rejects.toBeInstanceOf(OrganizationNotFound)
+    await expect(() => sut.execute('pet-02')).rejects.toBeInstanceOf(
+      PetNotFound,
+    )
   })
 })

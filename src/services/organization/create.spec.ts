@@ -1,14 +1,14 @@
 import { expect, describe, it, beforeEach } from 'vitest'
 import { InMemoryOrganizationsRepository } from '../../repositories/in-memory/in-memory-organizations-repository'
-import { CreateOrganizationService } from './create'
+import { RegisterOrganizationService } from './create'
 
 let organizationsRepository: InMemoryOrganizationsRepository
-let sut: CreateOrganizationService
+let sut: RegisterOrganizationService
 
 describe('Create Organization Service', () => {
   beforeEach(() => {
     organizationsRepository = new InMemoryOrganizationsRepository()
-    sut = new CreateOrganizationService(organizationsRepository)
+    sut = new RegisterOrganizationService(organizationsRepository)
   })
 
   it('should to create a new Organization', async () => {
