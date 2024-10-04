@@ -1,7 +1,10 @@
 import { Pet, Prisma } from '@prisma/client'
 import { randomUUID } from 'node:crypto'
-import { PetsRepository } from '../contracts/pets-repository'
 import { InMemoryOrganizationsRepository } from './in-memory-organizations-repository'
+import {
+  FetchPetsInCityParams,
+  PetsRepository,
+} from '../contracts/pets-repository'
 
 export class InMemoryPetsRepository implements PetsRepository {
   constructor(
@@ -28,14 +31,27 @@ export class InMemoryPetsRepository implements PetsRepository {
     return pet
   }
 
-  async fetchPetsInCity(city: string) {
+  async fetchPetsInCity({
+    city,
+    type,
+    ageInMonths,
+    color,
+    sex,
+  }: FetchPetsInCityParams) {
     const orgList = this.organizationRepository.items.filter(
       (org) => org.city.toLocaleLowerCase() === city.toLocaleLowerCase(),
     )
 
-    const petList = this.items.filter((pet) =>
-      orgList.some((org) => org.id === pet.organization_id),
-    )
+    const petList = this.items
+      .filter((pet) => orgList.some((org) => org.id === pet.organization_id))
+      .filter((pet) => (ageInMonths ? pet.age_in_months === ageInMonths : true))
+      .filter((pet) => (sex ? pet.sex === sex : true))
+      .filter((pet) => (type ? pet.type === type : true))
+      .filter((pet) =>
+        color
+          ? pet.color.toLocaleLowerCase() === color.toLocaleLowerCase()
+          : true,
+      )
 
     return petList
   }

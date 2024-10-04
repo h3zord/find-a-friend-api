@@ -38,7 +38,7 @@ describe('Fetch all pets in one city service', () => {
       name: 'John Doe',
       type: 'DOG',
       age_in_months: 12,
-      color: 'Black',
+      color: 'White',
       sex: 'MALE',
       organization_id: 'org-01',
     })
@@ -53,9 +53,15 @@ describe('Fetch all pets in one city service', () => {
     })
   })
 
-  it('should return the correct number of pets ', async () => {
+  it('should return the correct number of pets in the city', async () => {
     const { petList } = await sut.execute({ city: 'fake city' })
 
     expect(petList.length).toEqual(2)
+  })
+
+  it('should return the correct number of pets filtering by feature', async () => {
+    const { petList } = await sut.execute({ city: 'fake city', color: 'black' })
+
+    expect(petList.length).toEqual(1)
   })
 })
