@@ -1,19 +1,18 @@
 import { expect, describe, it, beforeEach } from 'vitest'
 import { InMemoryPetsRepository } from '../../repositories/in-memory/in-memory-pets-repository'
-import { CreatePetService } from './create'
 import { InMemoryOrganizationsRepository } from '../../repositories/in-memory/in-memory-organizations-repository'
-import { OrganizationNotFound } from '../errors/organization-not-found'
+import { FetchPetsInCityService } from './fetch-pets-in-city'
 
 let petsRepository: InMemoryPetsRepository
 let organizationRepository: InMemoryOrganizationsRepository
-let sut: CreatePetService
+let sut: FetchPetsInCityService
 
-describe('Create pet service', () => {
+describe('Fetch all pets in one city service', () => {
   beforeEach(async () => {
     organizationRepository = new InMemoryOrganizationsRepository()
     petsRepository = new InMemoryPetsRepository(organizationRepository)
 
-    sut = new CreatePetService(petsRepository, organizationRepository)
+    sut = new FetchPetsInCityService(petsRepository)
 
     await organizationRepository.create({
       id: 'org-01',
@@ -25,31 +24,38 @@ describe('Create pet service', () => {
       adress: 'Fake street',
       city: 'Fake city',
     })
-  })
 
-  it('should to create a new pet', async () => {
-    const { pet } = await sut.execute({
+    await petsRepository.create({
       name: 'John Doe',
       type: 'DOG',
-      ageInMonths: 12,
+      age_in_months: 12,
       color: 'Black',
       sex: 'MALE',
-      organizationId: 'org-01',
+      organization_id: 'org-01',
     })
 
-    expect(pet.id).toEqual(expect.any(String))
+    await petsRepository.create({
+      name: 'John Doe',
+      type: 'DOG',
+      age_in_months: 12,
+      color: 'Black',
+      sex: 'MALE',
+      organization_id: 'org-01',
+    })
+
+    await petsRepository.create({
+      name: 'John Doe',
+      type: 'DOG',
+      age_in_months: 12,
+      color: 'Black',
+      sex: 'MALE',
+      organization_id: 'org-02',
+    })
   })
 
-  it('should throw an error when organization id does not exist', async () => {
-    await expect(() =>
-      sut.execute({
-        name: 'John Doe',
-        type: 'DOG',
-        ageInMonths: 12,
-        color: 'Black',
-        sex: 'MALE',
-        organizationId: 'org-02',
-      }),
-    ).rejects.toBeInstanceOf(OrganizationNotFound)
+  it('should return the correct number of pets ', async () => {
+    const { petList } = await sut.execute({ city: 'fake city' })
+
+    expect(petList.length).toEqual(2)
   })
 })
