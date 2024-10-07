@@ -12,7 +12,7 @@ export class InMemoryOrganizationsRepository
       id: data.id ?? randomUUID(),
       name: data.name,
       email: data.email,
-      password: data.password,
+      password_hash: data.password_hash,
       description: data.description ?? '',
       phone: data.phone,
       adress: data.adress,
@@ -27,7 +27,17 @@ export class InMemoryOrganizationsRepository
   }
 
   async findById(id: string) {
-    const organization = this.items.find((item) => item.id === id)
+    const organization = this.items.find((org) => org.id === id)
+
+    if (!organization) {
+      return null
+    }
+
+    return organization
+  }
+
+  async findByEmail(email: string) {
+    const organization = this.items.find((org) => org.email === email)
 
     if (!organization) {
       return null

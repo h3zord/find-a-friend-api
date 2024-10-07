@@ -1,3 +1,5 @@
+import bcrypt from 'bcrypt'
+
 import { expect, describe, it, beforeEach } from 'vitest'
 import { InMemoryPetsRepository } from '../../repositories/in-memory/in-memory-pets-repository'
 import { InMemoryOrganizationsRepository } from '../../repositories/in-memory/in-memory-organizations-repository'
@@ -19,7 +21,7 @@ describe('Create pet service', () => {
       id: 'org-01',
       name: 'Fake Org',
       email: 'test@org.com',
-      password: '123456',
+      password_hash: bcrypt.hashSync('123456', 6),
       description: 'Org description',
       phone: '99 999999999',
       adress: 'Fake street',

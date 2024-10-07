@@ -1,3 +1,5 @@
+import bcrypt from 'bcrypt'
+
 import { Organization } from '@prisma/client'
 import { OrganizationsRepository } from '../../repositories/contracts/organization-repository'
 
@@ -27,10 +29,12 @@ export class RegisterOrganizationService {
     adress,
     city,
   }: RegisterOrganizationServiceRequest): Promise<RegisterOrganizationServiceResponse> {
+    const passwordHash = bcrypt.hashSync(password, 6)
+
     const organization = await this.organizationsRepository.register({
       name,
       email,
-      password,
+      password_hash: passwordHash,
       description,
       phone,
       adress,
