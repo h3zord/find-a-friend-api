@@ -1,11 +1,11 @@
 import { PrismaOrganizationsRepository } from '../../repositories/prisma/prisma-organizations-repository'
 import { RegisterOrganizationService } from '../organization/register'
 
-export function MakeRegisterService() {
+export function MakeRegisterOrganizationService() {
   const organizationsRepository = new PrismaOrganizationsRepository()
-  const registerService = new RegisterOrganizationService(
+  const registerOrganizationService = new RegisterOrganizationService(
     organizationsRepository,
   )
 
-  return registerService
+  return registerOrganizationService
 }

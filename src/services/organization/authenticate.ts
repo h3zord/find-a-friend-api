@@ -4,22 +4,22 @@ import { OrganizationsRepository } from '../../repositories/contracts/organizati
 import { Organization } from '@prisma/client'
 import { InvalidCredentials } from '../errors/Invalid-credentials'
 
-interface AuthenticateServiceRequest {
+interface AuthenticateOrganizationServiceRequest {
   email: string
   password: string
 }
 
-interface AuthenticateServiceResponse {
+interface AuthenticateOrganizationServiceResponse {
   organization: Organization
 }
 
-export class AuthenticateService {
+export class AuthenticateOrganizationService {
   constructor(private organizationsRepository: OrganizationsRepository) {}
 
   async execute({
     email,
     password,
-  }: AuthenticateServiceRequest): Promise<AuthenticateServiceResponse> {
+  }: AuthenticateOrganizationServiceRequest): Promise<AuthenticateOrganizationServiceResponse> {
     const organization = await this.organizationsRepository.findByEmail(email)
 
     if (!organization) {

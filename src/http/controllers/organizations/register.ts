@@ -1,13 +1,13 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
-import { MakeRegisterService } from '../../../services/factories/make-register-service'
+import { MakeRegisterOrganizationService } from '../../../services/factories/make-register-organization-service'
 import { UserAlreadyExists } from '../../../services/errors/user-already-exists'
 
 export async function registerOrganization(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const registerBodySchema = z.object({
+  const registerOrganizationBodySchema = z.object({
     name: z.string(),
     email: z.string().email(),
     password: z.string().min(6),
@@ -18,10 +18,10 @@ export async function registerOrganization(
   })
 
   const { name, email, password, description, phone, adress, city } =
-    registerBodySchema.parse(request.body)
+    registerOrganizationBodySchema.parse(request.body)
 
   try {
-    const registerOrganizationService = MakeRegisterService()
+    const registerOrganizationService = MakeRegisterOrganizationService()
 
     await registerOrganizationService.execute({
       name,

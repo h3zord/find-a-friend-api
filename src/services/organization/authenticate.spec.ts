@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt'
 
 import { expect, describe, it, beforeEach } from 'vitest'
-import { AuthenticateService } from './autenticate'
+import { AuthenticateService } from './authenticate'
 import { InMemoryOrganizationsRepository } from '../../repositories/in-memory/in-memory-organizations-repository'
 import { InvalidCredentials } from '../errors/Invalid-credentials'
 

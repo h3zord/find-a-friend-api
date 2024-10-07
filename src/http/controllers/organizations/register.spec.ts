@@ -13,7 +13,7 @@ describe('Register (e2e)', () => {
   })
 
   beforeEach(async () => {
-    await request(app.server).post('/organizations/register').send({
+    await request(app.server).post('/organization/register').send({
       name: 'Fake Org',
       email: 'test01@org.com',
       password: '123456',
@@ -26,7 +26,7 @@ describe('Register (e2e)', () => {
 
   it('should be able to register', async () => {
     const response = await request(app.server)
-      .post('/organizations/register')
+      .post('/organization/register')
       .send({
         name: 'Fake Org',
         email: 'test02@org.com',
@@ -42,7 +42,7 @@ describe('Register (e2e)', () => {
 
   it('should not be able to register with same email', async () => {
     const response = await request(app.server)
-      .post('/organizations/register')
+      .post('/organization/register')
       .send({
         name: 'Fake Org',
         email: 'test01@org.com',
