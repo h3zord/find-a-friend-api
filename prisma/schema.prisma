@@ -43,7 +43,7 @@ model Pet {
 model Organization {
   id            String   @id @default(uuid())
   name          String
-  email         String
+  email         String   @unique
   password_hash String
   description   String?
   phone         String

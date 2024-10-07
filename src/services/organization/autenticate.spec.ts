@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt'
 import { expect, describe, it, beforeEach } from 'vitest'
 import { AuthenticateService } from './autenticate'
 import { InMemoryOrganizationsRepository } from '../../repositories/in-memory/in-memory-organizations-repository'
-import { InvalidCredentialsError } from '../errors/Invalid-credentials-error'
+import { InvalidCredentials } from '../errors/Invalid-credentials'
 
 let organizationRepository: InMemoryOrganizationsRepository
 let sut: AuthenticateService
@@ -40,7 +40,7 @@ describe('Authenticate service', () => {
         email: 'johndoe@example.com',
         password: '123456',
       }),
-    ).rejects.toBeInstanceOf(InvalidCredentialsError)
+    ).rejects.toBeInstanceOf(InvalidCredentials)
   })
 
   it('should not be able to authenticate with wrong password', async () => {
@@ -49,6 +49,6 @@ describe('Authenticate service', () => {
         email: 'test@org.com',
         password: '123123',
       }),
-    ).rejects.toBeInstanceOf(InvalidCredentialsError)
+    ).rejects.toBeInstanceOf(InvalidCredentials)
   })
 })

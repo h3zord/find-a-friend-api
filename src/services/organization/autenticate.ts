@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt'
 
 import { OrganizationsRepository } from '../../repositories/contracts/organization-repository'
 import { Organization } from '@prisma/client'
-import { InvalidCredentialsError } from '../errors/Invalid-credentials-error'
+import { InvalidCredentials } from '../errors/Invalid-credentials'
 
 interface AuthenticateServiceRequest {
   email: string
@@ -23,7 +23,7 @@ export class AuthenticateService {
     const organization = await this.organizationsRepository.findByEmail(email)
 
     if (!organization) {
-      throw new InvalidCredentialsError()
+      throw new InvalidCredentials()
     }
 
     const doestPasswordMatches = bcrypt.compareSync(
@@ -32,7 +32,7 @@ export class AuthenticateService {
     )
 
     if (!doestPasswordMatches) {
-      throw new InvalidCredentialsError()
+      throw new InvalidCredentials()
     }
 
     return {

@@ -1,6 +1,6 @@
 import { expect, describe, it, beforeEach } from 'vitest'
 import { InMemoryOrganizationsRepository } from '../../repositories/in-memory/in-memory-organizations-repository'
-import { RegisterOrganizationService } from './create'
+import { RegisterOrganizationService } from './register'
 
 let organizationsRepository: InMemoryOrganizationsRepository
 let sut: RegisterOrganizationService
