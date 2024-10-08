@@ -10,7 +10,7 @@ let organizationRepository: InMemoryOrganizationsRepository
 let petsRepository: InMemoryPetsRepository
 let sut: GetPetByIdService
 
-describe('Create pet service', () => {
+describe('Get pet by id service', () => {
   beforeEach(async () => {
     organizationRepository = new InMemoryOrganizationsRepository()
     petsRepository = new InMemoryPetsRepository(organizationRepository)
@@ -28,7 +28,7 @@ describe('Create pet service', () => {
       city: 'Fake city',
     })
 
-    await petsRepository.create({
+    await petsRepository.register({
       id: 'pet-01',
       name: 'John Doe',
       type: 'DOG',

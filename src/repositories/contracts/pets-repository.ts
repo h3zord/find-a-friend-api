@@ -9,7 +9,7 @@ export interface FetchPetsInCityParams {
 }
 
 export interface PetsRepository {
-  create(data: Prisma.PetUncheckedCreateInput): Promise<Pet>
-  fetchPetsInCity(data: FetchPetsInCityParams): Promise<Pet[]>
+  register(data: Prisma.PetUncheckedCreateInput): Promise<Pet>
   getPetById(id: string): Promise<Pet | null>
+  fetchPetsInCity(searchParams: FetchPetsInCityParams): Promise<Pet[]>
 }

@@ -1,5 +1,5 @@
 import { PrismaOrganizationsRepository } from '../../repositories/prisma/prisma-organizations-repository'
-import { AuthenticateOrganizationService } from '../organization/authenticate'
+import { AuthenticateOrganizationService } from '../organizations/authenticate'
 
 export function MakeAuthenticateOrganizationService() {
   const organizationsRepository = new PrismaOrganizationsRepository()

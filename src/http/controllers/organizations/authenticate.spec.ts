@@ -1,7 +1,17 @@
 import request from 'supertest'
+import bcrypt from 'bcrypt'
 
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
+import { prisma } from '../../../lib/prisma'
 import { app } from '../../../app'
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+} from 'vitest'
 
 describe('Authenticate (e2e)', () => {
   beforeAll(async () => {
@@ -13,15 +23,21 @@ describe('Authenticate (e2e)', () => {
   })
 
   beforeEach(async () => {
-    await request(app.server).post('/organization/register').send({
-      name: 'Fake Org',
-      email: 'test01@org.com',
-      password: '123456',
-      description: 'Org description',
-      phone: '99 999999999',
-      adress: 'Fake street',
-      city: 'Fake city',
+    await prisma.organization.create({
+      data: {
+        name: 'Fake Org',
+        email: 'test01@org.com',
+        password_hash: bcrypt.hashSync('123456', 6),
+        description: 'Org description',
+        phone: '99 999999999',
+        adress: 'Fake street',
+        city: 'Fake city',
+      },
     })
+  })
+
+  afterEach(async () => {
+    await prisma.organization.deleteMany()
   })
 
   it('should be able to authenticate', async () => {

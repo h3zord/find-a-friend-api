@@ -2,22 +2,22 @@ import bcrypt from 'bcrypt'
 
 import { expect, describe, it, beforeEach } from 'vitest'
 import { InMemoryPetsRepository } from '../../repositories/in-memory/in-memory-pets-repository'
-import { CreatePetService } from './create'
+import { RegisterPetService } from './register'
 import { InMemoryOrganizationsRepository } from '../../repositories/in-memory/in-memory-organizations-repository'
 import { OrganizationNotFound } from '../errors/organization-not-found'
 
 let petsRepository: InMemoryPetsRepository
-let organizationRepository: InMemoryOrganizationsRepository
-let sut: CreatePetService
+let organizationsRepository: InMemoryOrganizationsRepository
+let sut: RegisterPetService
 
-describe('Create pet service', () => {
+describe('Register pet service', () => {
   beforeEach(async () => {
-    organizationRepository = new InMemoryOrganizationsRepository()
-    petsRepository = new InMemoryPetsRepository(organizationRepository)
+    organizationsRepository = new InMemoryOrganizationsRepository()
+    petsRepository = new InMemoryPetsRepository(organizationsRepository)
 
-    sut = new CreatePetService(petsRepository, organizationRepository)
+    sut = new RegisterPetService(petsRepository, organizationsRepository)
 
-    await organizationRepository.register({
+    await organizationsRepository.register({
       id: 'org-01',
       name: 'Fake Org',
       email: 'test@org.com',

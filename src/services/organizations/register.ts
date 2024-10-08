@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt'
 
 import { Organization } from '@prisma/client'
 import { OrganizationsRepository } from '../../repositories/contracts/organization-repository'
-import { UserAlreadyExists } from '../errors/user-already-exists'
+import { OrganizationAlreadyExists } from '../errors/organization-already-exists'
 
 interface RegisterOrganizationServiceRequest {
   name: string
@@ -34,7 +34,7 @@ export class RegisterOrganizationService {
       await this.organizationsRepository.findByEmail(email)
 
     if (userWithSameEmail) {
-      throw new UserAlreadyExists()
+      throw new OrganizationAlreadyExists()
     }
 
     const passwordHash = bcrypt.hashSync(password, 6)

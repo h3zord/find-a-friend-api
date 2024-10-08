@@ -1,17 +1,17 @@
 import bcrypt from 'bcrypt'
 
 import { expect, describe, it, beforeEach } from 'vitest'
-import { AuthenticateService } from './authenticate'
+import { AuthenticateOrganizationService } from './authenticate'
 import { InMemoryOrganizationsRepository } from '../../repositories/in-memory/in-memory-organizations-repository'
 import { InvalidCredentials } from '../errors/Invalid-credentials'
 
 let organizationRepository: InMemoryOrganizationsRepository
-let sut: AuthenticateService
+let sut: AuthenticateOrganizationService
 
 describe('Authenticate service', () => {
   beforeEach(async () => {
     organizationRepository = new InMemoryOrganizationsRepository()
-    sut = new AuthenticateService(organizationRepository)
+    sut = new AuthenticateOrganizationService(organizationRepository)
 
     await organizationRepository.register({
       id: 'org-01',

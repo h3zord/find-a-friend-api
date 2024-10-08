@@ -27,7 +27,7 @@ describe('Fetch all pets in one city service', () => {
       city: 'Fake city',
     })
 
-    await petsRepository.create({
+    await petsRepository.register({
       name: 'John Doe',
       type: 'DOG',
       age_in_months: 12,
@@ -36,7 +36,7 @@ describe('Fetch all pets in one city service', () => {
       organization_id: 'org-01',
     })
 
-    await petsRepository.create({
+    await petsRepository.register({
       name: 'John Doe',
       type: 'DOG',
       age_in_months: 12,
@@ -45,20 +45,20 @@ describe('Fetch all pets in one city service', () => {
       organization_id: 'org-01',
     })
 
-    await petsRepository.create({
+    await petsRepository.register({
       name: 'John Doe',
       type: 'DOG',
       age_in_months: 12,
-      color: 'Black',
+      color: 'Gray',
       sex: 'MALE',
-      organization_id: 'org-02',
+      organization_id: 'org-01',
     })
   })
 
   it('should return the correct number of pets in the city', async () => {
     const { petList } = await sut.execute({ city: 'fake city' })
 
-    expect(petList.length).toEqual(2)
+    expect(petList.length).toEqual(3)
   })
 
   it('should return the correct number of pets filtering by feature', async () => {

@@ -3,7 +3,7 @@ import { PetsRepository } from '../../repositories/contracts/pets-repository'
 import { OrganizationsRepository } from '../../repositories/contracts/organization-repository'
 import { OrganizationNotFound } from '../errors/organization-not-found'
 
-interface CreatePetServiceRequest {
+interface RegisterPetServiceRequest {
   name: string
   type: 'CAT' | 'DOG' | 'BIRD'
   ageInMonths: number
@@ -12,11 +12,11 @@ interface CreatePetServiceRequest {
   organizationId: string
 }
 
-interface CreatePetServiceResponse {
+interface RegisterPetServiceResponse {
   pet: Pet
 }
 
-export class CreatePetService {
+export class RegisterPetService {
   constructor(
     private petsRepository: PetsRepository,
     private organizationsRepository: OrganizationsRepository,
@@ -29,7 +29,7 @@ export class CreatePetService {
     color,
     sex,
     organizationId,
-  }: CreatePetServiceRequest): Promise<CreatePetServiceResponse> {
+  }: RegisterPetServiceRequest): Promise<RegisterPetServiceResponse> {
     const doesOrganizationExist =
       await this.organizationsRepository.findById(organizationId)
 
@@ -37,7 +37,7 @@ export class CreatePetService {
       throw new OrganizationNotFound()
     }
 
-    const pet = await this.petsRepository.create({
+    const pet = await this.petsRepository.register({
       name,
       type,
       age_in_months: ageInMonths,

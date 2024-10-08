@@ -1,14 +1,14 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 import { MakeRegisterOrganizationService } from '../../../services/factories/make-register-organization-service'
-import { UserAlreadyExists } from '../../../services/errors/user-already-exists'
+import { OrganizationAlreadyExists } from '../../../services/errors/organization-already-exists'
 
 export async function registerOrganization(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
   const registerOrganizationBodySchema = z.object({
-    name: z.string(),
+    name: z.string().min(3),
     email: z.string().email(),
     password: z.string().min(6),
     description: z.string().optional(),
@@ -33,7 +33,7 @@ export async function registerOrganization(
       city,
     })
   } catch (error) {
-    if (error instanceof UserAlreadyExists) {
+    if (error instanceof OrganizationAlreadyExists) {
       return reply.status(409).send({ message: error.message })
     }
 

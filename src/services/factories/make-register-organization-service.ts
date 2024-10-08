@@ -1,5 +1,5 @@
 import { PrismaOrganizationsRepository } from '../../repositories/prisma/prisma-organizations-repository'
-import { RegisterOrganizationService } from '../organization/register'
+import { RegisterOrganizationService } from '../organizations/register'
 
 export function MakeRegisterOrganizationService() {
   const organizationsRepository = new PrismaOrganizationsRepository()
