@@ -1,6 +1,5 @@
 import fastify from 'fastify'
 import fastifyJwt from '@fastify/jwt'
-import fastifyCookie from '@fastify/cookie'
 
 import { env } from './env'
 import { organizationRoutes } from './http/controllers/organizations/routes'
@@ -11,16 +10,10 @@ export const app = fastify()
 
 app.register(fastifyJwt, {
   secret: env.JWT_SECRET,
-  cookie: {
-    cookieName: 'refreshToken',
-    signed: false,
-  },
   sign: {
-    expiresIn: '10m',
+    expiresIn: '7d',
   },
 })
-
-app.register(fastifyCookie)
 
 app.register(organizationRoutes)
 app.register(petRoutes)
@@ -36,5 +29,5 @@ app.setErrorHandler((error, _request, reply) => {
     console.error(error)
   }
 
-  return reply.status(500).send({ message: 'Internal server error.' })
+  return reply.status(500).send({ message: 'Internal server error!' })
 })

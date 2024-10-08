@@ -42,35 +42,85 @@ describe('Register pet (e2e)', () => {
   })
 
   it('should be able to register', async () => {
-    const response = await request(app.server).post('/pet/register').send({
-      name: 'John Doe',
-      type: 'DOG',
-      ageInMonths: 12,
-      color: 'Black',
-      sex: 'MALE',
-      organizationId: 'org-01',
-    })
+    const authResponse = await request(app.server)
+      .post('/organization/authenticate')
+      .send({
+        email: 'test01@org.com',
+        password: '123456',
+      })
+
+    const { token } = authResponse.body
+
+    const response = await request(app.server)
+      .post('/pet/register')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        name: 'John Doe',
+        type: 'DOG',
+        ageInMonths: 12,
+        color: 'Black',
+        sex: 'MALE',
+        organizationId: 'org-01',
+      })
 
     expect(response.statusCode).toEqual(201)
   })
 
   it('should not be able to register with wrong organization id', async () => {
-    const response = await request(app.server).post('/pet/register').send({
-      name: 'John Doe',
-      type: 'DOG',
-      ageInMonths: 12,
-      color: 'Black',
-      sex: 'MALE',
-      organizationId: 'org-02',
-    })
+    const authResponse = await request(app.server)
+      .post('/organization/authenticate')
+      .send({
+        email: 'test01@org.com',
+        password: '123456',
+      })
+
+    const { token } = authResponse.body
+
+    const response = await request(app.server)
+      .post('/pet/register')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        name: 'John Doe',
+        type: 'DOG',
+        ageInMonths: 12,
+        color: 'Black',
+        sex: 'MALE',
+        organizationId: 'org-02',
+      })
 
     expect(response.statusCode).toEqual(404)
     expect(response.body.message).toEqual('Organization not found!')
   })
 
   it('should not be able to register without filling any field', async () => {
+    const authResponse = await request(app.server)
+      .post('/organization/authenticate')
+      .send({
+        email: 'test01@org.com',
+        password: '123456',
+      })
+
+    const { token } = authResponse.body
+
+    const response = await request(app.server)
+      .post('/pet/register')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        name: null,
+        type: 'DOG',
+        ageInMonths: 12,
+        color: 'Black',
+        sex: 'MALE',
+        organizationId: 'org-01',
+      })
+
+    expect(response.statusCode).toEqual(400)
+    expect(response.body.message).toEqual('Validation error!')
+  })
+
+  it('should not be able to register without a token', async () => {
     const response = await request(app.server).post('/pet/register').send({
-      name: null,
+      name: 'John Doe',
       type: 'DOG',
       ageInMonths: 12,
       color: 'Black',
@@ -78,7 +128,7 @@ describe('Register pet (e2e)', () => {
       organizationId: 'org-01',
     })
 
-    expect(response.statusCode).toEqual(400)
-    expect(response.body.message).toEqual('Validation error!')
+    expect(response.statusCode).toEqual(401)
+    expect(response.body.message).toEqual('Unauthorized!')
   })
 })
